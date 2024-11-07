@@ -1,0 +1,50 @@
+version: '3.8'
+
+x-base:
+  &base
+  networks:
+    - areal_net
+  restart: always
+
+services:
+  postgres:
+    <<: *base
+    build: ./containers/postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - ./postgres/db_backups:/backups
+      - ./postgres/pg:/var/lib/postgresql/data
+
+
+#  nginx:
+#    <<: *base
+#    image: ${INFRA_NGINX_IMAGE}:${INFRA_NGINX_TAG}
+#    hostname: nginx
+#    ports:
+#      - "127.0.0.1:80:80"
+#    volumes:
+#      - /etc/localtime:/etc/localtime/:ro
+#    env_file:
+#      - ./containers/nginx/.env.local
+#    mem_reservation: 20m
+#    mem_limit: 512m
+
+### local
+  svc:
+    <<: *base
+    build: ./containers/svc
+    ports:
+      - "127.0.0.1:8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./services/svc/app:/app
+      - ./services/svc/app/node_modules:/node_modules
+
+
+
+networks:
+  areal_net:
