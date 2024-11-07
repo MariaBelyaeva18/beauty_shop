@@ -18,31 +18,17 @@ services:
       - ./postgres/db_backups:/backups
       - ./postgres/pg:/var/lib/postgresql/data
 
-
-#  nginx:
-#    <<: *base
-#    image: ${INFRA_NGINX_IMAGE}:${INFRA_NGINX_TAG}
-#    hostname: nginx
-#    ports:
-#      - "127.0.0.1:80:80"
-#    volumes:
-#      - /etc/localtime:/etc/localtime/:ro
-#    env_file:
-#      - ./containers/nginx/.env.local
-#    mem_reservation: 20m
-#    mem_limit: 512m
-
 ### local
-  svc:
+  svc_beauty:
     <<: *base
-    build: ./containers/svc
+    build: ./containers/svc_beauty
     ports:
       - "127.0.0.1:8080:8080"
     env_file:
       - .env
     volumes:
-      - ./services/svc/app:/app
-      - ./services/svc/app/node_modules:/node_modules
+      - ./services/svc_beauty/app:/app
+      - ./services/svc_beauty/app/node_modules:/node_modules
 
 
 
