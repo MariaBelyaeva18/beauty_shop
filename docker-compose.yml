@@ -3,20 +3,21 @@ version: '3.8'
 x-base:
   &base
   networks:
-    - areal_net
+    - beauty_shop_network
   restart: always
 
 services:
   postgres:
     <<: *base
-    build: ./containers/postgres
+    image: postgres:17
     ports:
       - "127.0.0.1:5432:5432"
-    env_file:
-      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - ./postgres/db_backups:/backups
-      - ./postgres/pg:/var/lib/postgresql/data
+      - beauty_shop_database:/var/lib/postgresql/data
 
 ### local
   svc_beauty:
@@ -30,7 +31,8 @@ services:
       - ./services/svc_beauty/app:/app
       - ./services/svc_beauty/app/node_modules:/node_modules
 
-
+volumes:
+  beauty_shop_database:
 
 networks:
-  areal_net:
+  beauty_shop_network:
